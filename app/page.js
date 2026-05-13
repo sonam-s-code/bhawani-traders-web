@@ -16,9 +16,9 @@ import {
   ShieldCheck,
   Ship,
   Star,
-  TrendingUp,
   Truck,
   Users,
+  X,
 } from "lucide-react";
 
 const materials = [
@@ -42,12 +42,12 @@ const materials = [
 ];
 
 const priceTicker = [
-  "Chennai HMS-1 Scrap | INR 36,500 / Ton | ▲",
-  "Copper Scrap | INR 720 / Kg | ▲",
-  "Aluminium Sheet Cutting | INR 185 / Kg | No Change",
-  "SS Scrap 304 | INR 118 / Kg | ▲",
-  "Lead Scrap | INR 165 / Kg | No Change",
-  "Zinc Scrap | INR 210 / Kg | ▼",
+  "Chennai HMS-1 Scrap | INR 36,500 / Ton",
+  "Copper Scrap | INR 720 / Kg",
+  "Aluminium Sheet Cutting | INR 185 / Kg",
+  "SS Scrap 304 | INR 118 / Kg",
+  "Lead Scrap | INR 165 / Kg",
+  "Zinc Scrap | INR 210 / Kg",
 ];
 
 const sellOffers = [
@@ -85,6 +85,7 @@ export default function Home() {
     sell: "37",
     transport: "15000",
   });
+
   const [result, setResult] = useState(null);
 
   const profit = useMemo(() => {
@@ -123,7 +124,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#f5f7fb] text-slate-900">
-      {/* Top Bar */}
       <div className="bg-[#062a43] text-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-3 text-sm">
           <p className="flex items-center gap-2">
@@ -137,7 +137,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-white shadow-sm">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <div className="flex items-center gap-3">
@@ -169,7 +168,6 @@ export default function Home() {
         </nav>
       </header>
 
-      {/* Hero */}
       <section className="bg-gradient-to-br from-[#08344f] via-[#0b5570] to-[#0e9f6e] px-6 py-20 text-white">
         <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
@@ -198,7 +196,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Search Box */}
           <div className="rounded-2xl bg-white p-6 text-slate-900 shadow-2xl">
             <h3 className="text-2xl font-black text-[#062a43]">Search Scrap Materials</h3>
             <p className="mt-1 text-sm text-slate-500">Find buyers, sellers and deal estimate</p>
@@ -221,14 +218,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Price Ticker */}
       <section id="prices" className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-4">
           <div className="flex items-center gap-4 overflow-hidden">
             <div className="shrink-0 rounded bg-[#062a43] px-4 py-2 text-sm font-black text-white">
               Scrap Prices
             </div>
-            <div className="flex animate-none gap-4 overflow-x-auto text-sm font-semibold text-slate-700">
+            <div className="flex gap-4 overflow-x-auto text-sm font-semibold text-slate-700">
               {priceTicker.map((p) => (
                 <span key={p} className="shrink-0 rounded border bg-slate-50 px-4 py-2">
                   {p}
@@ -239,7 +235,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats */}
       <section className="bg-white px-6 py-10">
         <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-4">
           <Stat icon={<BadgeCheck />} number="30+" label="Years in Business" />
@@ -249,7 +244,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Offers */}
       <section id="offers" className="px-6 py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
@@ -277,7 +271,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* AI Agent */}
       <section id="agent" className="bg-white px-6 py-20">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
@@ -369,7 +362,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Materials */}
       <section id="materials" className="px-6 py-20">
         <div className="mx-auto max-w-7xl">
           <p className="font-black text-[#0e9f6e]">SCRAP CATEGORIES</p>
@@ -387,7 +379,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact */}
       <footer id="contact" className="bg-[#062a43] px-6 py-16 text-white">
         <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
           <div>
@@ -409,7 +400,143 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      <EnquiryBot />
     </main>
+  );
+}
+
+function EnquiryBot() {
+  const [open, setOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    {
+      sender: "bot",
+      text: "Hello! Welcome to Bhawani Traders. Are you looking to buy or sell scrap material?",
+    },
+  ]);
+  const [input, setInput] = useState("");
+
+  const businessNumber = "918168811099";
+
+  const getBotReply = (userText) => {
+    const text = userText.toLowerCase();
+
+    if (
+      text.includes("copper") ||
+      text.includes("aluminium") ||
+      text.includes("hms") ||
+      text.includes("ms") ||
+      text.includes("ss") ||
+      text.includes("nickel") ||
+      text.includes("zinc") ||
+      text.includes("lead") ||
+      text.includes("container") ||
+      text.includes("tmt") ||
+      text.includes("rod") ||
+      text.includes("plate") ||
+      text.includes("sheet")
+    ) {
+      return "Good. Please share quantity, location, and whether you want to buy or sell.";
+    }
+
+    if (
+      text.includes("ton") ||
+      text.includes("kg") ||
+      text.includes("chennai") ||
+      text.includes("rate") ||
+      text.includes("price") ||
+      text.includes("sell") ||
+      text.includes("buy")
+    ) {
+      return "Thank you. Please share your phone number so our team can contact you. You can also click the WhatsApp button below.";
+    }
+
+    if (/\d{10}/.test(text)) {
+      return "Thank you. Our Bhawani Traders team will contact you shortly.";
+    }
+
+    return "Please share material name, quantity, location, and buy/sell requirement.";
+  };
+
+  const sendMessage = () => {
+    if (!input.trim()) return;
+
+    const userMsg = { sender: "user", text: input };
+    const botMsg = { sender: "bot", text: getBotReply(input) };
+
+    setMessages((prev) => [...prev, userMsg, botMsg]);
+    setInput("");
+  };
+
+  const fullChat = messages
+    .map((m) => `${m.sender === "bot" ? "Bot" : "User"}: ${m.text}`)
+    .join("%0A");
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen(!open)}
+        className="fixed bottom-6 right-6 z-50 rounded-full bg-green-600 px-6 py-4 font-black text-white shadow-2xl hover:bg-green-700"
+      >
+        💬 AI Enquiry Bot
+      </button>
+
+      {open && (
+        <div className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border bg-white shadow-2xl">
+          <div className="flex items-center justify-between bg-[#062a43] px-5 py-4 text-white">
+            <div>
+              <h3 className="font-black">Bhawani Traders AI Bot</h3>
+              <p className="text-xs text-slate-300">Material enquiry assistant</p>
+            </div>
+            <button onClick={() => setOpen(false)}>
+              <X size={20} />
+            </button>
+          </div>
+
+          <div className="h-[330px] space-y-3 overflow-y-auto bg-slate-50 p-4">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`max-w-[85%] rounded-xl px-4 py-3 text-sm ${
+                  msg.sender === "bot"
+                    ? "bg-white text-slate-800 shadow-sm"
+                    : "ml-auto bg-green-600 text-white"
+                }`}
+              >
+                {msg.text}
+              </div>
+            ))}
+          </div>
+
+          <div className="border-t bg-white p-3">
+            <div className="flex gap-2">
+              <input
+                className="flex-1 rounded-lg border px-3 py-2 text-sm text-slate-900 outline-none focus:border-green-600"
+                placeholder="Type enquiry..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+              />
+              <button
+                onClick={sendMessage}
+                className="rounded-lg bg-green-600 px-4 font-bold text-white hover:bg-green-700"
+              >
+                Send
+              </button>
+            </div>
+
+            <a
+              href={`https://wa.me/${businessNumber}?text=New%20Material%20Enquiry%0A%0A${fullChat}`}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 block rounded-lg bg-[#25D366] px-4 py-3 text-center text-sm font-black text-white"
+            >
+              Send Enquiry on WhatsApp
+            </a>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

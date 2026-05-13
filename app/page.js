@@ -411,7 +411,7 @@ function EnquiryBot() {
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "Hello! Welcome to Bhawani Traders. Are you looking to buy or sell scrap material?",
+      text: "Hello 👋 I am Bhawani AI Assistant. Welcome to Bhawani Traders. Please tell me which scrap material you want to buy or sell.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -478,14 +478,14 @@ function EnquiryBot() {
         onClick={() => setOpen(!open)}
         className="fixed bottom-6 right-6 z-50 rounded-full bg-green-600 px-6 py-4 font-black text-white shadow-2xl hover:bg-green-700"
       >
-        💬 AI Enquiry Bot
+        💬 Bhawani AI
       </button>
 
       {open && (
         <div className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border bg-white shadow-2xl">
           <div className="flex items-center justify-between bg-[#062a43] px-5 py-4 text-white">
             <div>
-              <h3 className="font-black">Bhawani Traders AI Bot</h3>
+              <h3 className="font-black">Bhawani AI Assistant</h3>
               <p className="text-xs text-slate-300">Material enquiry assistant</p>
             </div>
             <button onClick={() => setOpen(false)}>

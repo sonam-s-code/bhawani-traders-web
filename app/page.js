@@ -396,7 +396,7 @@ export default function Home() {
 
           <div className="rounded-xl bg-white/10 p-6">
             <p className="text-slate-300">GST / CST</p>
-            <p className="mt-2 text-2xl font-black">33RSPS2216P1ZU</p>
+            <p className="mt-2 text-2xl font-black">33KRSPS2218P1ZU</p>
           </div>
         </div>
       </footer>

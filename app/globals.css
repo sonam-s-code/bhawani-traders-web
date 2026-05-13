@@ -6,21 +6,21 @@ html {
 
 body {
   margin: 0;
-  background: #f4f6f8;
+  background: #f5f7fb;
 }
 
 .rim-input {
   width: 100%;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #dbe3ea;
   background: white;
   padding: 14px 16px;
   font-weight: 700;
-  color: #111827;
+  color: #062a43;
   outline: none;
 }
 
 .rim-input:focus {
-  border-color: #f97316;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+  border-color: #0e9f6e;
+  box-shadow: 0 0 0 3px rgba(14, 159, 110, 0.14);
 }

@@ -2,19 +2,23 @@
 
 import { useMemo, useState } from "react";
 import {
-  Factory,
+  ArrowRight,
+  BadgeCheck,
   Bot,
   Calculator,
-  MessageCircle,
-  Phone,
+  CheckCircle2,
+  Factory,
   Mail,
   MapPin,
-  CheckCircle2,
-  Truck,
-  ShieldCheck,
+  MessageCircle,
+  Phone,
   Search,
+  ShieldCheck,
   Ship,
-  ArrowRight
+  Star,
+  TrendingUp,
+  Truck,
+  Users,
 } from "lucide-react";
 
 const materials = [
@@ -34,66 +38,44 @@ const materials = [
   "TMT Cutting",
   "Rod Butt Cutting",
   "Damage Container",
-  "Scrap Container - Chennai Port"
+  "Scrap Container - Chennai Port",
+];
+
+const priceTicker = [
+  "Chennai HMS-1 Scrap | INR 36,500 / Ton | ▲",
+  "Copper Scrap | INR 720 / Kg | ▲",
+  "Aluminium Sheet Cutting | INR 185 / Kg | No Change",
+  "SS Scrap 304 | INR 118 / Kg | ▲",
+  "Lead Scrap | INR 165 / Kg | No Change",
+  "Zinc Scrap | INR 210 / Kg | ▼",
+];
+
+const sellOffers = [
+  { tag: "SELL OFFER", title: "HMS-1 & HMS-2 Scrap Available", qty: "100 MT", location: "Chennai, India" },
+  { tag: "SELL OFFER", title: "Aluminium Sheet Cutting Scrap", qty: "25 MT", location: "Tamil Nadu, India" },
+  { tag: "SELL OFFER", title: "Copper Heavy Scrap Ready Stock", qty: "10 MT", location: "Chennai Port" },
+  { tag: "SELL OFFER", title: "Damage Container Scrap Supply", qty: "Bulk", location: "Chennai Port" },
+];
+
+const buyOffers = [
+  { tag: "BUY OFFER", title: "Buying HMS-1 Scrap Regularly", qty: "Monthly", location: "Pan India" },
+  { tag: "BUY OFFER", title: "Need Copper Scrap Suppliers", qty: "20 MT", location: "South India" },
+  { tag: "BUY OFFER", title: "SS Scrap Buyers Available", qty: "Bulk", location: "India" },
+  { tag: "BUY OFFER", title: "Re-roller Buyers for MS Scrap", qty: "Truckload", location: "Tamil Nadu" },
 ];
 
 const buyerData = {
-  "Aluminium Scrap": [
-    "Gravita India Ltd",
-    "VTA Industries",
-    "Akjay International",
-    "JustDial Aluminium Buyers"
-  ],
-  "Copper Scrap": [
-    "CMR Green Technologies",
-    "Saaggar Exports India",
-    "RecycleInMe.com",
-    "JustDial Copper Buyers"
-  ],
-  "SS Scrap": [
-    "Majisha Metals LLP",
-    "IndiaMart SS Scrap Directory",
-    "Volza Verified Buyers"
-  ],
-  "Nickel Scrap": [
-    "Go4WorldBusiness Nickel Buyers",
-    "IndiaMart Nickel Scrap Buyers",
-    "Local Alloy Buyers"
-  ],
-  "Zinc Scrap": [
-    "JustDial Zinc Scrap Buyers",
-    "IndiaMart Zinc Buyers",
-    "Local Metal Traders"
-  ],
-  "Lead Scrap": [
-    "Jain Metal Group",
-    "IndiaMart Lead Scrap Buyers",
-    "Local Battery Scrap Buyers"
-  ],
-  "HMS-1": [
-    "IndiaMart HMS Listings",
-    "Go4WorldBusiness HMS",
-    "ExportersIndia HMS",
-    "TradeWheel HMS India"
-  ],
-  "HMS-2": [
-    "IndiaMart HMS Listings",
-    "Go4WorldBusiness HMS",
-    "TradeWheel HMS India"
-  ],
-  "Damage Container": [
-    "ScrapMonster India Directory",
-    "IndiaMart Container Scrap",
-    "TradeIndia"
-  ],
-  "Scrap Container - Chennai Port": [
-    "ScrapMonster India Directory",
-    "IndiaMart Container Scrap",
-    "TradeIndia"
-  ]
+  "Aluminium Scrap": ["Gravita India Ltd", "VTA Industries", "Akjay International"],
+  "Copper Scrap": ["CMR Green Technologies", "Saaggar Exports India", "RecycleInMe.com"],
+  "SS Scrap": ["Majisha Metals LLP", "IndiaMart SS Scrap Directory", "Volza Verified Buyers"],
+  "HMS-1": ["IndiaMart HMS Listings", "Go4WorldBusiness HMS", "ExportersIndia HMS"],
+  "HMS-2": ["IndiaMart HMS Listings", "Go4WorldBusiness HMS", "TradeWheel HMS India"],
+  "Damage Container": ["ScrapMonster India Directory", "IndiaMart Container Scrap", "TradeIndia"],
+  "Scrap Container - Chennai Port": ["ScrapMonster India Directory", "IndiaMart Container Scrap", "TradeIndia"],
 };
 
 export default function Home() {
+  const [tab, setTab] = useState("sell");
   const [form, setForm] = useState({
     material: "HMS-1",
     qty: "20",
@@ -101,9 +83,8 @@ export default function Home() {
     location: "Chennai",
     buy: "34",
     sell: "37",
-    transport: "15000"
+    transport: "15000",
   });
-
   const [result, setResult] = useState(null);
 
   const profit = useMemo(() => {
@@ -114,205 +95,263 @@ export default function Home() {
     const netProfit = sellValue - buyCost - transport;
 
     return {
-      qtyKg,
       buyCost,
       sellValue,
       transport,
       netProfit,
-      margin: sellValue ? ((netProfit / sellValue) * 100).toFixed(2) : "0.00"
+      margin: sellValue ? ((netProfit / sellValue) * 100).toFixed(2) : "0.00",
     };
   }, [form]);
 
   const analyzeDeal = () => {
-    const buyers = buyerData[form.material] || [
-      "Local Foundry Buyers",
-      "Re-Roller Buyers",
-      "IndiaMart Buyers",
-      "TradeIndia Buyers",
-      "JustDial Buyers"
-    ];
+    const buyers =
+      buyerData[form.material] || [
+        "Local Foundry Buyers",
+        "Re-Roller Buyers",
+        "IndiaMart Buyers",
+        "TradeIndia Buyers",
+      ];
 
-    setResult({
-      ...form,
-      buyers,
-      profit
-    });
+    setResult({ ...form, buyers, profit });
   };
 
   const whatsappText = result
     ? `Material Available:%0A%0AMaterial: ${result.material}%0AQuantity: ${result.qty} ${result.unit}%0ALocation: ${result.location}%0A%0AReady for supply/lifting.%0APlease share your best buying rate.%0A%0ABhawani Traders`
     : "";
 
+  const offers = tab === "sell" ? sellOffers : buyOffers;
+
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
-      <section className="px-6 py-8 max-w-7xl mx-auto">
-        <nav className="flex justify-between items-center mb-16">
+    <main className="min-h-screen bg-[#f5f7fb] text-slate-900">
+      {/* Top Bar */}
+      <div className="bg-[#062a43] text-white">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-6 py-3 text-sm">
+          <p className="flex items-center gap-2">
+            <BadgeCheck size={16} className="text-yellow-300" />
+            30+ Years Scrap Business Experience
+          </p>
+          <div className="flex flex-wrap gap-5">
+            <p className="flex items-center gap-2"><Phone size={15} /> +91 81688 11099</p>
+            <p className="flex items-center gap-2"><Mail size={15} /> bhawanitraders31@gmail.com</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Header */}
+      <header className="sticky top-0 z-50 border-b bg-white shadow-sm">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-700 p-3 rounded-2xl shadow-lg">
+            <div className="grid h-12 w-12 place-items-center rounded-xl bg-[#0e9f6e] text-white">
               <Factory />
             </div>
             <div>
-              <h1 className="text-2xl font-black tracking-wide">
-                BHAWANI TRADERS
-              </h1>
-              <p className="text-sm text-slate-400">
-                Deals in Ferrous & Non-Ferrous Scrap
-              </p>
+              <h1 className="text-2xl font-black tracking-tight text-[#062a43]">BHAWANI TRADERS</h1>
+              <p className="text-xs font-semibold text-slate-500">Ferrous & Non-Ferrous Scrap Marketplace</p>
             </div>
+          </div>
+
+          <div className="hidden items-center gap-7 text-sm font-bold text-slate-600 md:flex">
+            <a href="#offers">Offers</a>
+            <a href="#prices">Prices</a>
+            <a href="#materials">Materials</a>
+            <a href="#agent">AI Agent</a>
+            <a href="#contact">Contact</a>
           </div>
 
           <a
-            href="tel:+918168811099"
-            className="bg-blue-700 hover:bg-blue-800 px-5 py-3 rounded-xl font-bold"
+            href="https://wa.me/918168811099"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-md bg-[#0e9f6e] px-5 py-3 font-black text-white hover:bg-[#0b8059]"
           >
-            Call Now
+            Inquire Now
           </a>
         </nav>
+      </header>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-[#08344f] via-[#0b5570] to-[#0e9f6e] px-6 py-20 text-white">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
-            <p className="text-blue-300 font-bold mb-4">
-              30+ Years Scrap Business Now Powered by AI
-            </p>
+            <div className="mb-5 flex flex-wrap gap-3 text-sm font-bold">
+              <span className="rounded bg-white/15 px-4 py-2">✓ Verified Buyers & Sellers</span>
+              <span className="rounded bg-white/15 px-4 py-2">★ Trusted Scrap Supply</span>
+              <span className="rounded bg-white/15 px-4 py-2">✓ Chennai Port Leads</span>
+            </div>
 
-            <h2 className="text-5xl md:text-7xl font-black leading-tight">
-              Find Material. Match Buyers. Supply Faster.
+            <h2 className="text-5xl font-black leading-tight md:text-7xl">
+              Buy & Sell Scrap with Bhawani Traders
             </h2>
 
-            <p className="text-slate-300 mt-6 text-lg leading-8">
-              Bhawani Traders helps source and supply ferrous, non-ferrous,
-              industrial cutting scrap, damaged containers and Chennai port
-              scrap using an AI-powered buyer matching workflow.
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/85">
+              Connect with scrap buyers and sellers for aluminium, copper, SS, nickel, zinc, lead,
+              HMS, MS cutting, TMT cutting and Chennai port damage container scrap.
             </p>
 
-            <div className="flex flex-wrap gap-4 mt-8">
-              <a
-                href="#agent"
-                className="bg-blue-700 hover:bg-blue-800 px-6 py-4 rounded-xl font-bold inline-flex items-center gap-2"
-              >
-                Use AI Agent <ArrowRight size={18} />
+            <div className="mt-8 flex flex-wrap gap-4">
+              <a href="#agent" className="rounded-md bg-yellow-400 px-7 py-4 font-black text-[#062a43] hover:bg-yellow-300">
+                Start AI Matching
               </a>
-
-              <a
-                href="#materials"
-                className="border border-white/20 px-6 py-4 rounded-xl font-bold"
-              >
-                View Materials
+              <a href="#offers" className="rounded-md border border-white/40 px-7 py-4 font-black hover:bg-white/10">
+                Browse Offers
               </a>
             </div>
           </div>
 
-          <div
-            id="agent"
-            className="bg-white/10 border border-white/10 rounded-3xl p-6 shadow-2xl"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <Bot className="text-blue-300" size={34} />
-              <div>
-                <h3 className="text-2xl font-bold">
-                  AI Material Supply Agent
-                </h3>
-                <p className="text-slate-400 text-sm">
-                  Buyer matching + profit calculator + WhatsApp message
+          {/* Search Box */}
+          <div className="rounded-2xl bg-white p-6 text-slate-900 shadow-2xl">
+            <h3 className="text-2xl font-black text-[#062a43]">Search Scrap Materials</h3>
+            <p className="mt-1 text-sm text-slate-500">Find buyers, sellers and deal estimate</p>
+
+            <div className="mt-5 grid gap-3">
+              <select className="rim-input" value={form.material} onChange={(e) => setForm({ ...form, material: e.target.value })}>
+                {materials.map((m) => <option key={m}>{m}</option>)}
+              </select>
+              <input className="rim-input" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+              <button onClick={analyzeDeal} className="rounded-md bg-[#0e9f6e] py-4 font-black text-white hover:bg-[#0b8059]">
+                Search / Analyze
+              </button>
+            </div>
+
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <Trust icon={<Users />} title="Buyer Network" text="Pan India" />
+              <Trust icon={<Truck />} title="Supply Support" text="Fast Deals" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Price Ticker */}
+      <section id="prices" className="border-b border-slate-200 bg-white">
+        <div className="mx-auto max-w-7xl px-6 py-4">
+          <div className="flex items-center gap-4 overflow-hidden">
+            <div className="shrink-0 rounded bg-[#062a43] px-4 py-2 text-sm font-black text-white">
+              Scrap Prices
+            </div>
+            <div className="flex animate-none gap-4 overflow-x-auto text-sm font-semibold text-slate-700">
+              {priceTicker.map((p) => (
+                <span key={p} className="shrink-0 rounded border bg-slate-50 px-4 py-2">
+                  {p}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="bg-white px-6 py-10">
+        <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-4">
+          <Stat icon={<BadgeCheck />} number="30+" label="Years in Business" />
+          <Stat icon={<MessageCircle />} number="1000+" label="Business Enquiries" />
+          <Stat icon={<Users />} number="Pan India" label="Buyers & Sellers" />
+          <Stat icon={<Star />} number="Trusted" label="Local Scrap Network" />
+        </div>
+      </section>
+
+      {/* Offers */}
+      <section id="offers" className="px-6 py-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <div>
+              <p className="font-black text-[#0e9f6e]">MARKETPLACE</p>
+              <h2 className="mt-2 text-4xl font-black text-[#062a43]">Recent Scrap Offers</h2>
+              <p className="mt-2 text-slate-600">Browse sell offers and buy enquiries for scrap materials.</p>
+            </div>
+
+            <div className="flex rounded-md border bg-white p-1 shadow-sm">
+              <button onClick={() => setTab("sell")} className={`rounded px-5 py-3 font-black ${tab === "sell" ? "bg-[#0e9f6e] text-white" : "text-slate-600"}`}>
+                Sell Offers
+              </button>
+              <button onClick={() => setTab("buy")} className={`rounded px-5 py-3 font-black ${tab === "buy" ? "bg-[#0e9f6e] text-white" : "text-slate-600"}`}>
+                Buy Offers
+              </button>
+            </div>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {offers.map((offer) => (
+              <OfferCard key={offer.title} offer={offer} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* AI Agent */}
+      <section id="agent" className="bg-white px-6 py-20">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <p className="font-black text-[#0e9f6e]">AI SCRAP BUSINESS AGENT</p>
+            <h2 className="mt-2 text-4xl font-black text-[#062a43]">
+              Match buyers and calculate profit instantly
+            </h2>
+            <p className="mt-5 leading-8 text-slate-600">
+              Enter material, quantity, rate and transport cost. The agent will suggest buyers,
+              estimate profit and prepare WhatsApp message for deal communication.
+            </p>
+
+            <div className="mt-6 grid gap-3">
+              {["Buyer matching", "Deal margin calculation", "WhatsApp offer message", "Supplier and buyer workflow"].map((x) => (
+                <p key={x} className="flex gap-3 font-bold text-slate-700">
+                  <CheckCircle2 className="text-[#0e9f6e]" /> {x}
                 </p>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border bg-[#f8fafc] p-6 shadow-xl">
+            <div className="mb-5 flex items-center gap-3">
+              <div className="grid h-12 w-12 place-items-center rounded-xl bg-[#0e9f6e] text-white">
+                <Bot />
+              </div>
+              <div>
+                <h3 className="text-2xl font-black text-[#062a43]">AI Material Supply Agent</h3>
+                <p className="text-sm text-slate-500">Buyer matching + profit calculator</p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <select
-                className="col-span-2 bg-slate-800 rounded-xl p-3 outline-none"
-                value={form.material}
-                onChange={(e) =>
-                  setForm({ ...form, material: e.target.value })
-                }
-              >
-                {materials.map((m) => (
-                  <option key={m}>{m}</option>
-                ))}
+              <select className="rim-input col-span-2" value={form.material} onChange={(e) => setForm({ ...form, material: e.target.value })}>
+                {materials.map((m) => <option key={m}>{m}</option>)}
               </select>
-
-              <input
-                className="bg-slate-800 rounded-xl p-3 outline-none"
-                placeholder="Quantity"
-                value={form.qty}
-                onChange={(e) => setForm({ ...form, qty: e.target.value })}
-              />
-
-              <select
-                className="bg-slate-800 rounded-xl p-3 outline-none"
-                value={form.unit}
-                onChange={(e) => setForm({ ...form, unit: e.target.value })}
-              >
+              <input className="rim-input" value={form.qty} onChange={(e) => setForm({ ...form, qty: e.target.value })} />
+              <select className="rim-input" value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })}>
                 <option>Tons</option>
                 <option>Kg</option>
               </select>
-
-              <input
-                className="col-span-2 bg-slate-800 rounded-xl p-3 outline-none"
-                placeholder="Location"
-                value={form.location}
-                onChange={(e) =>
-                  setForm({ ...form, location: e.target.value })
-                }
-              />
-
-              <input
-                className="bg-slate-800 rounded-xl p-3 outline-none"
-                placeholder="Buying ₹/kg"
-                value={form.buy}
-                onChange={(e) => setForm({ ...form, buy: e.target.value })}
-              />
-
-              <input
-                className="bg-slate-800 rounded-xl p-3 outline-none"
-                placeholder="Selling ₹/kg"
-                value={form.sell}
-                onChange={(e) => setForm({ ...form, sell: e.target.value })}
-              />
-
-              <input
-                className="col-span-2 bg-slate-800 rounded-xl p-3 outline-none"
-                placeholder="Transport Cost ₹"
-                value={form.transport}
-                onChange={(e) =>
-                  setForm({ ...form, transport: e.target.value })
-                }
-              />
+              <input className="rim-input col-span-2" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+              <input className="rim-input" value={form.buy} onChange={(e) => setForm({ ...form, buy: e.target.value })} />
+              <input className="rim-input" value={form.sell} onChange={(e) => setForm({ ...form, sell: e.target.value })} />
+              <input className="rim-input col-span-2" value={form.transport} onChange={(e) => setForm({ ...form, transport: e.target.value })} />
             </div>
 
-            <button
-              onClick={analyzeDeal}
-              className="w-full bg-blue-700 hover:bg-blue-800 mt-4 py-4 rounded-xl font-bold"
-            >
+            <button onClick={analyzeDeal} className="mt-4 w-full rounded-md bg-[#0e9f6e] py-4 font-black text-white hover:bg-[#0b8059]">
               Analyze Deal
             </button>
 
             {result && (
-              <div className="mt-5 bg-blue-500/10 border border-blue-400/30 rounded-2xl p-4">
-                <h4 className="font-bold text-blue-300 mb-2">AI Result</h4>
+              <div className="mt-5 rounded-xl border bg-white p-5">
+                <h4 className="font-black text-[#062a43]">AI Result</h4>
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <Result label="Buying Cost" value={`₹${Math.round(result.profit.buyCost).toLocaleString("en-IN")}`} />
+                  <Result label="Selling Value" value={`₹${Math.round(result.profit.sellValue).toLocaleString("en-IN")}`} />
+                  <Result label="Transport" value={`₹${Math.round(result.profit.transport).toLocaleString("en-IN")}`} />
+                  <Result label="Margin" value={`${result.profit.margin}%`} />
+                </div>
 
-                <p>
-                  Buying Cost: ₹
-                  {Math.round(result.profit.buyCost).toLocaleString("en-IN")}
-                </p>
-                <p>
-                  Selling Value: ₹
-                  {Math.round(result.profit.sellValue).toLocaleString("en-IN")}
-                </p>
-                <p>
-                  Transport Cost: ₹
-                  {Math.round(result.profit.transport).toLocaleString("en-IN")}
-                </p>
-                <p className="font-bold text-green-300 mt-2">
-                  Net Profit: ₹
-                  {Math.round(result.profit.netProfit).toLocaleString("en-IN")}
-                </p>
-                <p>Margin: {result.profit.margin}%</p>
+                <div className="mt-4 rounded-lg bg-green-50 p-4">
+                  <p className="text-sm font-bold text-green-700">Estimated Net Profit</p>
+                  <p className="text-3xl font-black text-[#062a43]">
+                    ₹{Math.round(result.profit.netProfit).toLocaleString("en-IN")}
+                  </p>
+                </div>
 
-                <p className="mt-3 font-bold">Suggested Buyers:</p>
-                <ul className="list-disc ml-5 text-slate-200">
+                <p className="mt-4 font-black">Suggested Buyers</p>
+                <ul className="mt-2 space-y-1 text-sm">
                   {result.buyers.map((b) => (
-                    <li key={b}>{b}</li>
+                    <li key={b} className="flex gap-2">
+                      <CheckCircle2 size={16} className="text-[#0e9f6e]" /> {b}
+                    </li>
                   ))}
                 </ul>
 
@@ -320,7 +359,7 @@ export default function Home() {
                   href={`https://wa.me/?text=${whatsappText}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 mt-4 text-green-300 font-bold"
+                  className="mt-5 inline-flex items-center gap-2 rounded-md bg-green-600 px-5 py-3 font-black text-white"
                 >
                   Send WhatsApp Message <MessageCircle size={18} />
                 </a>
@@ -330,134 +369,43 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="materials" className="bg-white text-slate-950 py-20 px-6">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-black mb-4">
-            Scrap Categories We Deal In
-          </h2>
+      {/* Materials */}
+      <section id="materials" className="px-6 py-20">
+        <div className="mx-auto max-w-7xl">
+          <p className="font-black text-[#0e9f6e]">SCRAP CATEGORIES</p>
+          <h2 className="mt-2 text-4xl font-black text-[#062a43]">Materials We Deal In</h2>
 
-          <p className="text-slate-600 mb-10">
-            Ferrous, non-ferrous, industrial cutting scrap and Chennai port
-            container scrap.
-          </p>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {materials.map((item) => (
-              <div
-                key={item}
-                className="border rounded-2xl p-5 bg-slate-50 shadow-sm hover:shadow-lg transition"
-              >
-                <CheckCircle2 className="text-blue-700 mb-3" />
-                <p className="font-bold">{item}</p>
+              <div key={item} className="rounded-xl border bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                <Factory className="mb-4 text-[#0e9f6e]" />
+                <p className="font-black">{item}</p>
+                <p className="mt-2 text-sm text-slate-500">Available for sourcing and supply</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 px-6 bg-slate-900">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-black mb-10">
-            Digital Scrap Supply Workflow
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            <Service
-              icon={<Search />}
-              title="Find Material"
-              text="Capture material leads from suppliers, factories, yards and Chennai port sources."
-            />
-            <Service
-              icon={<Bot />}
-              title="AI Buyer Matching"
-              text="Match material type with suitable buyers and trading platforms instantly."
-            />
-            <Service
-              icon={<Calculator />}
-              title="Profit Calculation"
-              text="Calculate buying cost, selling value, transport cost and net profit."
-            />
-            <Service
-              icon={<MessageCircle />}
-              title="WhatsApp Offers"
-              text="Generate professional buyer and supplier messages for faster deal closure."
-            />
-            <Service
-              icon={<Truck />}
-              title="Supply Tracking"
-              text="Track loading, transport, payment and delivery status."
-            />
-            <Service
-              icon={<ShieldCheck />}
-              title="Verified Records"
-              text="Organize suppliers, buyers, GST details, quotations and deal history."
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-blue-700 py-16 px-6">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-6 text-center">
-          <Stat number="30+" label="Years Experience" />
-          <Stat number="17+" label="Scrap Categories" />
-          <Stat number="AI" label="Buyer Matching" />
-          <Stat number="India" label="Supply Network" />
-        </div>
-      </section>
-
-      <section className="bg-white text-slate-950 py-20 px-6">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
+      {/* Contact */}
+      <footer id="contact" className="bg-[#062a43] px-6 py-16 text-white">
+        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
           <div>
-            <h2 className="text-4xl font-black mb-4">
-              Chennai Port & Industrial Scrap Supply
-            </h2>
-            <p className="text-slate-600 leading-8">
-              We focus on industrial scrap, ferrous and non-ferrous materials,
-              cutting scrap, damaged containers and scrap containers. Our goal
-              is to connect genuine material sources with reliable buyers using
-              a faster digital process.
+            <h3 className="text-3xl font-black">BHAWANI TRADERS</h3>
+            <p className="mt-4 leading-7 text-slate-300">
+              Dealers in ferrous and non-ferrous scrap. AI-powered sourcing and supply support.
             </p>
           </div>
 
-          <div className="bg-slate-100 rounded-3xl p-8">
-            <Ship className="text-blue-700 mb-4" size={42} />
-            <h3 className="text-2xl font-black mb-3">
-              Damage / Scrap Container Leads
-            </h3>
-            <p className="text-slate-600">
-              Chennai port scrap container leads can be entered into the AI
-              agent for buyer matching, quotation preparation and deal tracking.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <footer className="py-12 px-6 bg-slate-950 border-t border-white/10">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
-          <div>
-            <h3 className="text-2xl font-black">BHAWANI TRADERS</h3>
-            <p className="text-slate-400 mt-3">
-              Dealers in ferrous and non-ferrous scrap. AI-powered sourcing and
-              supply support.
-            </p>
+          <div className="space-y-4">
+            <p className="flex gap-3"><Phone className="text-[#0e9f6e]" /> +91 81688 11099</p>
+            <p className="flex gap-3"><Mail className="text-[#0e9f6e]" /> bhawanitraders31@gmail.com</p>
+            <p className="flex gap-3"><MapPin className="text-[#0e9f6e]" /> Gummidipoondi, Manali New Town, Chennai, Tamil Nadu, India</p>
           </div>
 
-          <div className="space-y-3 text-slate-300">
-            <p className="flex gap-3">
-              <Phone className="text-blue-300" /> +91 81688 11099
-            </p>
-            <p className="flex gap-3">
-              <Mail className="text-blue-300" /> bhawanitraders31@gmail.com
-            </p>
-            <p className="flex gap-3">
-              <MapPin className="text-blue-300" /> Gummidipoondi, Manali New
-              Town
-            </p>
-          </div>
-
-          <div>
-            <p className="font-bold">GST / CST</p>
-            <p className="text-slate-400">33RSPS2216P1ZU</p>
+          <div className="rounded-xl bg-white/10 p-6">
+            <p className="text-slate-300">GST / CST</p>
+            <p className="mt-2 text-2xl font-black">33RSPS2216P1ZU</p>
           </div>
         </div>
       </footer>
@@ -465,21 +413,47 @@ export default function Home() {
   );
 }
 
-function Service({ icon, title, text }) {
+function Trust({ icon, title, text }) {
   return (
-    <div className="bg-white/5 border border-white/10 rounded-3xl p-7 hover:bg-white/10 transition">
-      <div className="text-blue-300 mb-4">{icon}</div>
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="text-slate-400 leading-7">{text}</p>
+    <div className="rounded-xl border bg-slate-50 p-4">
+      <div className="mb-2 text-[#0e9f6e]">{icon}</div>
+      <p className="font-black">{title}</p>
+      <p className="text-sm text-slate-500">{text}</p>
     </div>
   );
 }
 
-function Stat({ number, label }) {
+function Stat({ icon, number, label }) {
   return (
-    <div>
-      <p className="text-4xl font-black">{number}</p>
-      <p className="font-semibold">{label}</p>
+    <div className="rounded-xl border bg-slate-50 p-5">
+      <div className="mb-3 text-[#0e9f6e]">{icon}</div>
+      <p className="text-2xl font-black text-[#062a43]">{number}</p>
+      <p className="text-sm text-slate-500">{label}</p>
+    </div>
+  );
+}
+
+function OfferCard({ offer }) {
+  return (
+    <div className="rounded-xl border bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+      <span className="rounded bg-green-50 px-3 py-1 text-xs font-black text-green-700">
+        {offer.tag}
+      </span>
+      <h3 className="mt-4 text-lg font-black text-[#062a43]">{offer.title}</h3>
+      <p className="mt-3 text-sm text-slate-600">Quantity: {offer.qty}</p>
+      <p className="text-sm text-slate-600">Location: {offer.location}</p>
+      <button className="mt-5 w-full rounded-md border border-[#0e9f6e] py-3 font-black text-[#0e9f6e] hover:bg-[#0e9f6e] hover:text-white">
+        Inquire Now
+      </button>
+    </div>
+  );
+}
+
+function Result({ label, value }) {
+  return (
+    <div className="rounded-lg bg-slate-50 p-4">
+      <p className="text-xs font-bold text-slate-500">{label}</p>
+      <p className="font-black text-[#062a43]">{value}</p>
     </div>
   );
 }

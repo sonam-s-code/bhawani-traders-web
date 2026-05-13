@@ -1,846 +1,304 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
-  BadgeCheck,
-  Bot,
-  CheckCircle2,
   Factory,
-  Mail,
-  MapPin,
-  MessageCircle,
   Phone,
-  Star,
-  Truck,
+  Mail,
   Users,
+  Truck,
+  MessageCircle,
   X,
-  ShieldCheck,
-  Clock,
-  Award,
-  PackageCheck,
 } from "lucide-react";
 
-const products = [
-  {
-    title: "Aluminium Scrap",
-    text: "Industrial aluminium scrap, extrusion scrap, sheet cutting and mixed aluminium materials.",
-  },
-  {
-    title: "Copper Scrap",
-    text: "Copper heavy scrap, copper wire scrap and industrial copper supply solutions.",
-  },
-  {
-    title: "SS Scrap",
-    text: "Stainless steel scrap for foundries, traders and industrial buyers.",
-  },
-  {
-    title: "HMS-1 / HMS-2",
-    text: "Heavy melting scrap, LMS and MS scrap supply for re-rollers.",
-  },
-  {
-    title: "Sheet / Plate Cutting",
-    text: "Plate cutting, angle cutting, rod butt cutting and TMT cutting materials.",
-  },
-  {
-    title: "Damage Containers",
-    text: "Damage container and scrap container sourcing from Chennai Port.",
-  },
-];
-
 const materials = [
-  "Aluminium Scrap",
-  "Copper Scrap",
-  "SS Scrap",
-  "Nickel Scrap",
-  "Zinc Scrap",
-  "Lead Scrap",
-  "MS Scrap",
   "HMS-1",
   "HMS-2",
-  "LMS",
+  "MS Scrap",
+  "Copper Scrap",
+  "Aluminium Scrap",
+  "SS Scrap",
+  "Nickel Scrap",
+  "Lead Scrap",
+  "Zinc Scrap",
+  "TMT Cutting",
   "Sheet Cutting",
   "Plate Cutting",
   "Angle Cutting",
-  "TMT Cutting",
-  "Rod Butt Cutting",
   "Damage Container",
-  "Scrap Container - Chennai Port",
 ];
 
-const buyerData = {
-  "Aluminium Scrap": [
-    "Gravita India Ltd",
-    "VTA Industries",
-    "Akjay International",
-  ],
-  "Copper Scrap": [
-    "CMR Green Technologies",
-    "Saaggar Exports India",
-    "RecycleInMe.com",
-  ],
-  "SS Scrap": [
-    "Majisha Metals LLP",
-    "IndiaMart SS Scrap Directory",
-    "Volza Verified Buyers",
-  ],
-  "HMS-1": [
-    "IndiaMart HMS Listings",
-    "Go4WorldBusiness HMS",
-    "ExportersIndia HMS",
-  ],
-  "HMS-2": [
-    "IndiaMart HMS Listings",
-    "Go4WorldBusiness HMS",
-    "TradeWheel HMS India",
-  ],
-  "Damage Container": [
-    "ScrapMonster India Directory",
-    "IndiaMart Container Scrap",
-    "TradeIndia",
-  ],
-  "Scrap Container - Chennai Port": [
-    "ScrapMonster India Directory",
-    "IndiaMart Container Scrap",
-    "TradeIndia",
-  ],
-};
+const prices = [
+  "Chennai HMS-1 Scrap | INR 36,500 / Ton",
+  "Copper Scrap | INR 720 / Kg",
+  "Aluminium Sheet Cutting | INR 185 / Kg",
+  "SS Scrap 304 | INR 118 / Kg",
+  "Lead Scrap | INR 168 / Kg",
+];
 
 export default function Home() {
-  const [form, setForm] = useState({
-    material: "HMS-1",
-    qty: "20",
-    unit: "Tons",
-    location: "Chennai",
-    buy: "34",
-    sell: "37",
-    transport: "15000",
-  });
-
-  const [result, setResult] = useState(null);
-
-  const profit = useMemo(() => {
-    const qtyKg =
-      Number(form.qty || 0) * (form.unit === "Tons" ? 1000 : 1);
-
-    const buyCost = qtyKg * Number(form.buy || 0);
-    const sellValue = qtyKg * Number(form.sell || 0);
-    const transport = Number(form.transport || 0);
-    const netProfit = sellValue - buyCost - transport;
-
-    return {
-      buyCost,
-      sellValue,
-      transport,
-      netProfit,
-      margin: sellValue
-        ? ((netProfit / sellValue) * 100).toFixed(2)
-        : "0.00",
-    };
-  }, [form]);
-
-  const analyzeDeal = () => {
-    const buyers =
-      buyerData[form.material] || [
-        "Local Foundry Buyers",
-        "Re-Roller Buyers",
-        "IndiaMart Buyers",
-        "TradeIndia Buyers",
-      ];
-
-    setResult({
-      ...form,
-      buyers,
-      profit,
-    });
-  };
+  const [material, setMaterial] = useState("HMS-1");
+  const [location, setLocation] = useState("Chennai");
 
   return (
-    <main className="min-h-screen bg-[#f4f6f8] text-slate-900">
+    <main className="website">
       {/* TOP BAR */}
-      <div className="bg-[#111827] text-white">
-        <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-3 px-6 py-3 text-sm">
-          <p className="flex items-center gap-2">
-            <Mail size={16} className="text-orange-400" />
-            bhawanitraders31@gmail.com
-          </p>
+      <div className="topbar">
+        <div className="container topbar-inner">
+          <div className="top-left">
+            🟡 30+ Years Scrap Business Experience
+          </div>
 
-          <div className="flex flex-wrap gap-5">
-            <p className="flex items-center gap-2">
-              <Phone size={16} className="text-orange-400" />
+          <div className="top-right">
+            <span>
+              <Phone size={14} />
               +91 81688 11099
-            </p>
+            </span>
 
-            <p className="flex items-center gap-2">
-              <MapPin size={16} className="text-orange-400" />
-              Gummidipoondi, Chennai
-            </p>
+            <span>
+              <Mail size={14} />
+              bhawanitraders31@gmail.com
+            </span>
           </div>
         </div>
       </div>
 
       {/* NAVBAR */}
-      <header className="sticky top-0 z-50 bg-white shadow-md">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-          <div className="flex items-center gap-3">
-            <div className="grid h-14 w-14 place-items-center rounded bg-orange-500 text-white">
+      <header className="navbar">
+        <div className="container nav-inner">
+          <div className="logo-area">
+            <div className="logo-icon">
               <Factory size={30} />
             </div>
 
             <div>
-              <h1 className="text-3xl font-black tracking-tight text-[#111827]">
-                BHAWANI TRADERS
-              </h1>
-
-              <p className="text-xs font-bold uppercase tracking-widest text-orange-600">
-                Scrap Sourcing & Supply
-              </p>
+              <h1>BHAWANI TRADERS</h1>
+              <p>Ferrous & Non-Ferrous Scrap Marketplace</p>
             </div>
           </div>
 
-          <div className="hidden gap-7 text-sm font-black text-slate-700 md:flex">
-            <a href="#about">About</a>
-            <a href="#products">Products</a>
-            <a href="#agent">AI Agent</a>
-            <a href="#why">Why Us</a>
-            <a href="#contact">Contact</a>
-          </div>
+          <nav className="nav-links">
+            <a href="#">Offers</a>
+            <a href="#">Prices</a>
+            <a href="#">Materials</a>
+            <a href="#">AI Agent</a>
+            <a href="#">Contact</a>
+          </nav>
 
           <a
             href="https://wa.me/918168811099"
             target="_blank"
-            rel="noreferrer"
-            className="rounded bg-orange-500 px-5 py-3 font-black text-white hover:bg-orange-600"
+            className="enquire-btn"
           >
-            Enquire Now
+            Inquire Now
           </a>
-        </nav>
+        </div>
       </header>
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-[#111827] px-6 py-24 text-white">
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_20%_20%,#f97316,transparent_30%),radial-gradient(circle_at_80%_30%,#94a3b8,transparent_30%)]" />
+      <section className="hero">
+        <div className="container hero-grid">
+          {/* LEFT */}
+          <div className="hero-left">
+            <div className="hero-tags">
+              <span>✔ Verified Buyers & Sellers</span>
+              <span>★ Trusted Scrap Supply</span>
+              <span>✔ Chennai Port Leads</span>
+            </div>
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
-          <div>
-            <p className="mb-5 inline-flex rounded bg-orange-500 px-4 py-2 text-sm font-black">
-              30+ Years Experience
-            </p>
-
-            <h2 className="text-5xl font-black leading-tight md:text-7xl">
-              Industrial Scrap Supply Solutions
+            <h2>
+              Buy & Sell Scrap
+              <br />
+              with Bhawani
+              <br />
+              Traders
             </h2>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-              Dealers and suppliers in ferrous and non-ferrous scrap,
-              industrial cutting scrap and Chennai port damage container
-              materials.
+            <p>
+              Connect with scrap buyers and sellers for aluminium,
+              copper, SS, nickel, zinc, lead, HMS, MS cutting,
+              TMT cutting and Chennai port damage container scrap.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-4">
-              <a
-                href="#products"
-                className="rounded bg-orange-500 px-7 py-4 font-black text-white hover:bg-orange-600"
-              >
-                Explore Products
-              </a>
+            <div className="hero-buttons">
+              <button className="primary-btn">
+                Start AI Matching
+              </button>
 
-              <a
-                href="#agent"
-                className="rounded border border-white/30 px-7 py-4 font-black hover:bg-white/10"
-              >
-                Use AI Agent
-              </a>
+              <button className="secondary-btn">
+                Browse Offers
+              </button>
             </div>
           </div>
 
-          {/* HERO CARD */}
-          <div className="rounded-xl bg-white p-6 text-slate-900 shadow-2xl">
-            <p className="text-sm font-black text-orange-600">
-              AI MATERIAL SUPPLY AGENT
+          {/* RIGHT */}
+          <div className="search-card">
+            <h3>Search Scrap Materials</h3>
+
+            <p>
+              Find buyers, sellers and deal estimate
             </p>
 
-            <h3 className="mt-2 text-3xl font-black text-[#111827]">
-              Find Buyers & Estimate Profit
-            </h3>
-
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              <select
-                className="rim-input col-span-2"
-                value={form.material}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    material: e.target.value,
-                  })
-                }
-              >
-                {materials.map((m) => (
-                  <option key={m}>{m}</option>
-                ))}
-              </select>
-
-              <input
-                className="rim-input"
-                value={form.qty}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    qty: e.target.value,
-                  })
-                }
-              />
-
-              <select
-                className="rim-input"
-                value={form.unit}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    unit: e.target.value,
-                  })
-                }
-              >
-                <option>Tons</option>
-                <option>Kg</option>
-              </select>
-
-              <input
-                className="rim-input col-span-2"
-                value={form.location}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    location: e.target.value,
-                  })
-                }
-              />
-
-              <input
-                className="rim-input"
-                value={form.buy}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    buy: e.target.value,
-                  })
-                }
-              />
-
-              <input
-                className="rim-input"
-                value={form.sell}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    sell: e.target.value,
-                  })
-                }
-              />
-
-              <input
-                className="rim-input col-span-2"
-                value={form.transport}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    transport: e.target.value,
-                  })
-                }
-              />
-            </div>
-
-            <button
-              onClick={analyzeDeal}
-              className="mt-4 w-full rounded bg-orange-500 py-4 font-black text-white hover:bg-orange-600"
+            <select
+              value={material}
+              onChange={(e) =>
+                setMaterial(e.target.value)
+              }
             >
-              Analyze Deal
+              {materials.map((m) => (
+                <option key={m}>{m}</option>
+              ))}
+            </select>
+
+            <input
+              value={location}
+              onChange={(e) =>
+                setLocation(e.target.value)
+              }
+            />
+
+            <button className="search-btn">
+              Search / Analyze
             </button>
 
-            {result && (
-              <div className="mt-5 rounded-lg border bg-slate-50 p-4">
-                <p className="font-black text-[#111827]">
-                  Estimated Net Profit
-                </p>
+            <div className="info-grid">
+              <div className="info-box">
+                <Users size={24} />
 
-                <p className="text-3xl font-black text-green-700">
-                  ₹
-                  {Math.round(
-                    result.profit.netProfit
-                  ).toLocaleString("en-IN")}
-                </p>
-
-                <p className="mt-2 text-sm font-bold">
-                  Margin: {result.profit.margin}%
-                </p>
-
-                <p className="mt-3 font-black">
-                  Suggested Buyers:
-                </p>
-
-                <ul className="mt-2 space-y-1 text-sm">
-                  {result.buyers.map((b) => (
-                    <li
-                      key={b}
-                      className="flex gap-2"
-                    >
-                      <CheckCircle2
-                        size={16}
-                        className="text-orange-500"
-                      />
-                      {b}
-                    </li>
-                  ))}
-                </ul>
+                <div>
+                  <h4>Buyer Network</h4>
+                  <p>Pan India</p>
+                </div>
               </div>
-            )}
-          </div>
-        </div>
-      </section>
 
-      {/* STATS */}
-      <section className="bg-orange-500 px-6 py-8 text-white">
-        <div className="mx-auto grid max-w-7xl gap-5 text-center md:grid-cols-4">
-          <Stat number="30+" label="Years Experience" />
-          <Stat number="17+" label="Scrap Categories" />
-          <Stat number="Pan India" label="Buyer Network" />
-          <Stat number="AI" label="Digital Matching" />
-        </div>
-      </section>
+              <div className="info-box">
+                <Truck size={24} />
 
-      {/* ABOUT */}
-      <section id="about" className="bg-white px-6 py-24">
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2">
-          <div className="rounded-xl bg-slate-100 p-10">
-            <Factory size={70} className="text-orange-500" />
-
-            <h3 className="mt-6 text-3xl font-black text-[#111827]">
-              Trusted Scrap Trading Business
-            </h3>
-
-            <p className="mt-4 leading-8 text-slate-600">
-              Bhawani Traders has over 30 years of experience in scrap
-              sourcing and supply across ferrous and non-ferrous materials.
-            </p>
-          </div>
-
-          <div>
-            <p className="font-black uppercase text-orange-600">
-              About Company
-            </p>
-
-            <h2 className="mt-3 text-5xl font-black text-[#111827]">
-              Bhawani Traders
-            </h2>
-
-            <p className="mt-6 leading-8 text-slate-600">
-              We deal in aluminium scrap, copper scrap, stainless steel
-              scrap, HMS scrap, cutting scrap and Chennai port damage
-              container materials.
-            </p>
-
-            <div className="mt-8 grid gap-4 md:grid-cols-2">
-              <Info
-                icon={<ShieldCheck />}
-                title="Trusted Supply"
-                text="Reliable sourcing and buyer matching."
-              />
-
-              <Info
-                icon={<PackageCheck />}
-                title="Industrial Materials"
-                text="Ferrous and non-ferrous scrap supply."
-              />
+                <div>
+                  <h4>Supply Support</h4>
+                  <p>Fast Deals</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PRODUCTS */}
-      <section id="products" className="px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-center font-black uppercase text-orange-600">
-            Our Products
-          </p>
+      {/* PRICE BAR */}
+      <section className="price-bar">
+        <div className="container price-inner">
+          <div className="price-title">
+            Scrap Prices
+          </div>
 
-          <h2 className="mt-3 text-center text-5xl font-black text-[#111827]">
-            Scrap Materials We Deal In
-          </h2>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {products.map((p) => (
-              <ProductCard
-                key={p.title}
-                title={p.title}
-                text={p.text}
-              />
+          <div className="price-scroll">
+            {prices.map((p) => (
+              <div key={p} className="price-chip">
+                {p}
+              </div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* WHY US */}
-      <section id="why" className="bg-white px-6 py-24">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-center font-black uppercase text-orange-600">
-            Why Choose Us
-          </p>
-
-          <h2 className="mt-3 text-center text-5xl font-black text-[#111827]">
-            Industry Expertise & Trust
-          </h2>
-
-          <div className="mt-12 grid gap-6 md:grid-cols-5">
-            <Why icon={<ShieldCheck />} title="Integrity" />
-            <Why icon={<Award />} title="Quality" />
-            <Why icon={<Clock />} title="Timely Supply" />
-            <Why icon={<BadgeCheck />} title="Experience" />
-            <Why icon={<Users />} title="Customer Focus" />
-          </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer
-        id="contact"
-        className="bg-[#111827] px-6 py-16 text-white"
-      >
-        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
-          <div>
-            <h3 className="text-3xl font-black">
-              BHAWANI TRADERS
-            </h3>
-
-            <p className="mt-4 leading-7 text-slate-300">
-              Dealers in ferrous and non-ferrous scrap materials.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <p className="flex gap-3">
-              <Phone className="text-orange-500" />
-              +91 81688 11099
-            </p>
-
-            <p className="flex gap-3">
-              <Mail className="text-orange-500" />
-              bhawanitraders31@gmail.com
-            </p>
-
-            <p className="flex gap-3">
-              <MapPin className="text-orange-500" />
-              Gummidipoondi, Manali New Town, Chennai
-            </p>
-          </div>
-
-          <div className="rounded-xl bg-white/10 p-6">
-            <p className="text-slate-300">
-              GST / CST
-            </p>
-
-            <p className="mt-2 text-2xl font-black">
-              33RSPS2216P1ZU
-            </p>
-          </div>
-        </div>
-      </footer>
 
       <BhawaniBot />
     </main>
   );
 }
 
-/* COMPONENTS */
-
-function Stat({ number, label }) {
-  return (
-    <div>
-      <p className="text-4xl font-black">
-        {number}
-      </p>
-
-      <p className="font-bold">
-        {label}
-      </p>
-    </div>
-  );
-}
-
-function Info({ icon, title, text }) {
-  return (
-    <div className="rounded-lg border p-5">
-      <div className="mb-3 text-orange-500">
-        {icon}
-      </div>
-
-      <h3 className="font-black">
-        {title}
-      </h3>
-
-      <p className="mt-2 text-sm text-slate-600">
-        {text}
-      </p>
-    </div>
-  );
-}
-
-function ProductCard({ title, text }) {
-  return (
-    <div className="group rounded-xl bg-white p-7 shadow-md transition hover:-translate-y-1 hover:shadow-xl">
-      <Factory
-        className="mb-5 text-orange-500"
-        size={42}
-      />
-
-      <h3 className="text-2xl font-black text-[#111827]">
-        {title}
-      </h3>
-
-      <p className="mt-3 leading-7 text-slate-600">
-        {text}
-      </p>
-
-      <button className="mt-5 font-black text-orange-600">
-        Explore More
-      </button>
-    </div>
-  );
-}
-
-function Why({ icon, title }) {
-  return (
-    <div className="rounded-xl border bg-slate-50 p-6 text-center shadow-sm">
-      <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-full bg-orange-100 text-orange-600">
-        {icon}
-      </div>
-
-      <h3 className="font-black">
-        {title}
-      </h3>
-    </div>
-  );
-}
-
-/* AI BOT */
-
 function BhawaniBot() {
-  const [open, setOpen] = useState(false);
-
-  const [step, setStep] = useState("requirement");
-
-  const [input, setInput] = useState("");
-
-  const [lead, setLead] = useState({
-    requirement: "",
-    material: "",
-    quantity: "",
-    location: "",
-    name: "",
-    phone: "",
-    extra: "",
-  });
+  const [open, setOpen] = useState(true);
 
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "Hello 👋 I am Bhawani AI Assistant. Are you looking to buy or sell scrap material?",
+      text: "Hello 👋 I am Bhawani AI Assistant. Welcome to Bhawani Traders. Please tell me which scrap material you want to buy or sell.",
     },
   ]);
 
-  const businessNumber = "918168811099";
-
-  const askNext = (currentStep, value) => {
-    if (currentStep === "requirement") {
-      setLead((p) => ({
-        ...p,
-        requirement: value,
-      }));
-
-      setStep("material");
-
-      return "Please tell me the material name.";
-    }
-
-    if (currentStep === "material") {
-      setLead((p) => ({
-        ...p,
-        material: value,
-      }));
-
-      setStep("quantity");
-
-      return "Please share the quantity.";
-    }
-
-    if (currentStep === "quantity") {
-      setLead((p) => ({
-        ...p,
-        quantity: value,
-      }));
-
-      setStep("location");
-
-      return "Please share the material location.";
-    }
-
-    if (currentStep === "location") {
-      setLead((p) => ({
-        ...p,
-        location: value,
-      }));
-
-      setStep("name");
-
-      return "Please share your name.";
-    }
-
-    if (currentStep === "name") {
-      setLead((p) => ({
-        ...p,
-        name: value,
-      }));
-
-      setStep("phone");
-
-      return "Please share your phone number.";
-    }
-
-    if (currentStep === "phone") {
-      setLead((p) => ({
-        ...p,
-        phone: value,
-      }));
-
-      setStep("extra");
-
-      return "Any extra details?";
-    }
-
-    if (currentStep === "extra") {
-      setLead((p) => ({
-        ...p,
-        extra: value,
-      }));
-
-      setStep("complete");
-
-      return "Thank you ✅ Please click WhatsApp button below.";
-    }
-
-    return "Please click WhatsApp.";
-  };
+  const [input, setInput] = useState("");
 
   const sendMessage = () => {
     if (!input.trim()) return;
-
-    const userText = input.trim();
-
-    const botText = askNext(step, userText);
 
     setMessages((prev) => [
       ...prev,
       {
         sender: "user",
-        text: userText,
+        text: input,
       },
       {
         sender: "bot",
-        text: botText,
+        text: "Thank you. Our team will contact you shortly regarding your enquiry.",
       },
     ]);
 
     setInput("");
   };
 
-  const whatsappMessage = `
-New Material Enquiry - Bhawani Traders
-
-Requirement: ${lead.requirement}
-Material: ${lead.material}
-Quantity: ${lead.quantity}
-Location: ${lead.location}
-Name: ${lead.name}
-Phone: ${lead.phone}
-Extra Details: ${lead.extra}
-`;
-
   return (
     <>
+      {/* FLOAT BUTTON */}
       <button
-        onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 z-50 rounded-full bg-green-600 px-6 py-4 font-black text-white shadow-2xl hover:bg-green-700"
+        className="chat-float"
+        onClick={() => setOpen(true)}
       >
-        💬 Bhawani AI
+        <MessageCircle size={18} />
+        Bhawani AI
       </button>
 
+      {/* CHAT BOX */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[92vw] overflow-hidden rounded-xl border bg-white shadow-2xl">
-          <div className="flex items-center justify-between bg-[#111827] px-5 py-4 text-white">
+        <div className="chat-box">
+          <div className="chat-header">
             <div>
-              <h3 className="font-black">
-                Bhawani AI Assistant
-              </h3>
-
-              <p className="text-xs text-slate-300">
-                Material enquiry assistant
-              </p>
+              <h3>Bhawani AI Assistant</h3>
+              <p>Material enquiry assistant</p>
             </div>
 
-            <button onClick={() => setOpen(false)}>
-              <X size={20} />
+            <button
+              onClick={() => setOpen(false)}
+            >
+              <X size={18} />
             </button>
           </div>
 
-          <div className="h-[330px] space-y-3 overflow-y-auto bg-slate-50 p-4">
+          <div className="chat-messages">
             {messages.map((msg, i) => (
               <div
                 key={i}
-                className={`max-w-[85%] rounded-xl px-4 py-3 text-sm ${
+                className={
                   msg.sender === "bot"
-                    ? "bg-white text-slate-800 shadow-sm"
-                    : "ml-auto bg-green-600 text-white"
-                }`}
+                    ? "bot-message"
+                    : "user-message"
+                }
               >
                 {msg.text}
               </div>
             ))}
           </div>
 
-          <div className="border-t bg-white p-3">
-            <div className="flex gap-2">
-              <input
-                className="flex-1 rounded-lg border px-3 py-2 text-sm text-slate-900 outline-none"
-                placeholder="Type here..."
-                value={input}
-                onChange={(e) =>
-                  setInput(e.target.value)
-                }
-                onKeyDown={(e) =>
-                  e.key === "Enter" &&
-                  sendMessage()
-                }
-              />
+          <div className="chat-input-area">
+            <input
+              placeholder="Type enquiry..."
+              value={input}
+              onChange={(e) =>
+                setInput(e.target.value)
+              }
+            />
 
-              <button
-                onClick={sendMessage}
-                className="rounded-lg bg-green-600 px-4 font-bold text-white"
-              >
-                Send
-              </button>
-            </div>
-
-            {step === "complete" && (
-              <a
-                href={`https://wa.me/${businessNumber}?text=${encodeURIComponent(
-                  whatsappMessage
-                )}`}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-3 block rounded-lg bg-[#25D366] px-4 py-3 text-center text-sm font-black text-white"
-              >
-                ✅ Submit Enquiry to WhatsApp
-              </a>
-            )}
+            <button onClick={sendMessage}>
+              Send
+            </button>
           </div>
+
+          <a
+            href="https://wa.me/918168811099"
+            target="_blank"
+            className="whatsapp-btn"
+          >
+            Send Enquiry on WhatsApp
+          </a>
         </div>
       )}
     </>

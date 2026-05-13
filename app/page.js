@@ -2,19 +2,14 @@
 
 import { useMemo, useState } from "react";
 import {
-  ArrowRight,
   BadgeCheck,
   Bot,
-  Calculator,
   CheckCircle2,
   Factory,
   Mail,
   MapPin,
   MessageCircle,
   Phone,
-  Search,
-  ShieldCheck,
-  Ship,
   Star,
   Truck,
   Users,
@@ -39,15 +34,6 @@ const materials = [
   "Rod Butt Cutting",
   "Damage Container",
   "Scrap Container - Chennai Port",
-];
-
-const priceTicker = [
-  "Chennai HMS-1 Scrap | INR 36,500 / Ton",
-  "Copper Scrap | INR 720 / Kg",
-  "Aluminium Sheet Cutting | INR 185 / Kg",
-  "SS Scrap 304 | INR 118 / Kg",
-  "Lead Scrap | INR 165 / Kg",
-  "Zinc Scrap | INR 210 / Kg",
 ];
 
 const sellOffers = [
@@ -116,10 +102,6 @@ export default function Home() {
     setResult({ ...form, buyers, profit });
   };
 
-  const whatsappText = result
-    ? `Material Available:%0A%0AMaterial: ${result.material}%0AQuantity: ${result.qty} ${result.unit}%0ALocation: ${result.location}%0A%0AReady for supply/lifting.%0APlease share your best buying rate.%0A%0ABhawani Traders`
-    : "";
-
   const offers = tab === "sell" ? sellOffers : buyOffers;
 
   return (
@@ -151,7 +133,6 @@ export default function Home() {
 
           <div className="hidden items-center gap-7 text-sm font-bold text-slate-600 md:flex">
             <a href="#offers">Offers</a>
-            <a href="#prices">Prices</a>
             <a href="#materials">Materials</a>
             <a href="#agent">AI Agent</a>
             <a href="#contact">Contact</a>
@@ -204,7 +185,9 @@ export default function Home() {
               <select className="rim-input" value={form.material} onChange={(e) => setForm({ ...form, material: e.target.value })}>
                 {materials.map((m) => <option key={m}>{m}</option>)}
               </select>
+
               <input className="rim-input" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+
               <button onClick={analyzeDeal} className="rounded-md bg-[#0e9f6e] py-4 font-black text-white hover:bg-[#0b8059]">
                 Search / Analyze
               </button>
@@ -213,23 +196,6 @@ export default function Home() {
             <div className="mt-5 grid grid-cols-2 gap-3">
               <Trust icon={<Users />} title="Buyer Network" text="Pan India" />
               <Trust icon={<Truck />} title="Supply Support" text="Fast Deals" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="prices" className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-4">
-          <div className="flex items-center gap-4 overflow-hidden">
-            <div className="shrink-0 rounded bg-[#062a43] px-4 py-2 text-sm font-black text-white">
-              Scrap Prices
-            </div>
-            <div className="flex gap-4 overflow-x-auto text-sm font-semibold text-slate-700">
-              {priceTicker.map((p) => (
-                <span key={p} className="shrink-0 rounded border bg-slate-50 px-4 py-2">
-                  {p}
-                </span>
-              ))}
             </div>
           </div>
         </div>
@@ -325,6 +291,7 @@ export default function Home() {
             {result && (
               <div className="mt-5 rounded-xl border bg-white p-5">
                 <h4 className="font-black text-[#062a43]">AI Result</h4>
+
                 <div className="mt-4 grid grid-cols-2 gap-3">
                   <Result label="Buying Cost" value={`₹${Math.round(result.profit.buyCost).toLocaleString("en-IN")}`} />
                   <Result label="Selling Value" value={`₹${Math.round(result.profit.sellValue).toLocaleString("en-IN")}`} />
@@ -347,15 +314,6 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-
-                <a
-                  href={`https://wa.me/?text=${whatsappText}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-5 inline-flex items-center gap-2 rounded-md bg-green-600 px-5 py-3 font-black text-white"
-                >
-                  Send WhatsApp Message <MessageCircle size={18} />
-                </a>
               </div>
             )}
           </div>
@@ -396,81 +354,116 @@ export default function Home() {
 
           <div className="rounded-xl bg-white/10 p-6">
             <p className="text-slate-300">GST / CST</p>
-            <p className="mt-2 text-2xl font-black">33KRSPS2218P1ZU</p>
+            <p className="mt-2 text-2xl font-black">33RSPS2216P1ZU</p>
           </div>
         </div>
       </footer>
 
-      <EnquiryBot />
+      <BhawaniBot />
     </main>
   );
 }
 
-function EnquiryBot() {
+function BhawaniBot() {
   const [open, setOpen] = useState(false);
+  const [step, setStep] = useState("requirement");
+  const [input, setInput] = useState("");
+  const [lead, setLead] = useState({
+    requirement: "",
+    material: "",
+    quantity: "",
+    location: "",
+    name: "",
+    phone: "",
+    extra: "",
+  });
+
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "Hello 👋 I am Bhawani AI Assistant. Welcome to Bhawani Traders. Please tell me which scrap material you want to buy or sell.",
+      text: "Hello 👋 I am Bhawani AI Assistant. Are you looking to buy or sell scrap material?",
     },
   ]);
-  const [input, setInput] = useState("");
 
   const businessNumber = "918168811099";
 
-  const getBotReply = (userText) => {
-    const text = userText.toLowerCase();
-
-    if (
-      text.includes("copper") ||
-      text.includes("aluminium") ||
-      text.includes("hms") ||
-      text.includes("ms") ||
-      text.includes("ss") ||
-      text.includes("nickel") ||
-      text.includes("zinc") ||
-      text.includes("lead") ||
-      text.includes("container") ||
-      text.includes("tmt") ||
-      text.includes("rod") ||
-      text.includes("plate") ||
-      text.includes("sheet")
-    ) {
-      return "Good. Please share quantity, location, and whether you want to buy or sell.";
+  const askNext = (currentStep, value) => {
+    if (currentStep === "requirement") {
+      setLead((p) => ({ ...p, requirement: value }));
+      setStep("material");
+      return "Please tell me the material name. Example: Copper Scrap, HMS-1, Aluminium Scrap, SS Scrap, Damage Container.";
     }
 
-    if (
-      text.includes("ton") ||
-      text.includes("kg") ||
-      text.includes("chennai") ||
-      text.includes("rate") ||
-      text.includes("price") ||
-      text.includes("sell") ||
-      text.includes("buy")
-    ) {
-      return "Thank you. Please share your phone number so our team can contact you. You can also click the WhatsApp button below.";
+    if (currentStep === "material") {
+      setLead((p) => ({ ...p, material: value }));
+      setStep("quantity");
+      return "Please share the quantity. Example: 10 tons, 500 kg, 1 truckload.";
     }
 
-    if (/\d{10}/.test(text)) {
-      return "Thank you. Our Bhawani Traders team will contact you shortly.";
+    if (currentStep === "quantity") {
+      setLead((p) => ({ ...p, quantity: value }));
+      setStep("location");
+      return "Please share the material location.";
     }
 
-    return "Please share material name, quantity, location, and buy/sell requirement.";
+    if (currentStep === "location") {
+      setLead((p) => ({ ...p, location: value }));
+      setStep("name");
+      return "Please share your name.";
+    }
+
+    if (currentStep === "name") {
+      setLead((p) => ({ ...p, name: value }));
+      setStep("phone");
+      return "Please share your phone number.";
+    }
+
+    if (currentStep === "phone") {
+      setLead((p) => ({ ...p, phone: value }));
+      setStep("extra");
+      return "Any extra details? Example: expected rate, loading condition, photos available, urgent requirement.";
+    }
+
+    if (currentStep === "extra") {
+      setLead((p) => ({ ...p, extra: value }));
+      setStep("complete");
+      return "Thank you ✅ Your enquiry is complete. Please click the green WhatsApp button below to send all details to Bhawani Traders.";
+    }
+
+    return "Your enquiry is complete. Please click the WhatsApp button below.";
   };
 
   const sendMessage = () => {
     if (!input.trim()) return;
 
-    const userMsg = { sender: "user", text: input };
-    const botMsg = { sender: "bot", text: getBotReply(input) };
+    const userText = input.trim();
+    const botText = askNext(step, userText);
 
-    setMessages((prev) => [...prev, userMsg, botMsg]);
+    setMessages((prev) => [
+      ...prev,
+      { sender: "user", text: userText },
+      { sender: "bot", text: botText },
+    ]);
+
     setInput("");
   };
 
-  const fullChat = messages
-    .map((m) => `${m.sender === "bot" ? "Bot" : "User"}: ${m.text}`)
-    .join("%0A");
+  const whatsappMessage = `New Material Enquiry - Bhawani Traders
+
+Customer Enquiry Details:
+
+Requirement: ${lead.requirement || "-"}
+Material: ${lead.material || "-"}
+Quantity: ${lead.quantity || "-"}
+Location: ${lead.location || "-"}
+Name: ${lead.name || "-"}
+Phone: ${lead.phone || "-"}
+Extra Details: ${lead.extra || "-"}
+
+Chat History:
+${messages.map((m) => `${m.sender === "bot" ? "Bhawani AI" : "Customer"}: ${m.text}`).join("\n")}
+
+Please contact this customer for scrap material enquiry.`;
 
   return (
     <>
@@ -482,7 +475,7 @@ function EnquiryBot() {
       </button>
 
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border bg-white shadow-2xl">
+        <div className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[92vw] overflow-hidden rounded-2xl border bg-white shadow-2xl">
           <div className="flex items-center justify-between bg-[#062a43] px-5 py-4 text-white">
             <div>
               <h3 className="font-black">Bhawani AI Assistant</h3>
@@ -512,7 +505,7 @@ function EnquiryBot() {
             <div className="flex gap-2">
               <input
                 className="flex-1 rounded-lg border px-3 py-2 text-sm text-slate-900 outline-none focus:border-green-600"
-                placeholder="Type enquiry..."
+                placeholder="Type here..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
@@ -525,14 +518,16 @@ function EnquiryBot() {
               </button>
             </div>
 
-            <a
-              href={`https://wa.me/${businessNumber}?text=New%20Material%20Enquiry%0A%0A${fullChat}`}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-3 block rounded-lg bg-[#25D366] px-4 py-3 text-center text-sm font-black text-white"
-            >
-              Send Enquiry on WhatsApp
-            </a>
+            {step === "complete" && (
+              <a
+                href={`https://wa.me/${businessNumber}?text=${encodeURIComponent(whatsappMessage)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 block rounded-lg bg-[#25D366] px-4 py-3 text-center text-sm font-black text-white"
+              >
+                ✅ Submit Enquiry to WhatsApp
+              </a>
+            )}
           </div>
         </div>
       )}
